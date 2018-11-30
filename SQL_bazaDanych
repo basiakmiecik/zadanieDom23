@@ -1,0 +1,10 @@
+create database library;
+
+create table library.book (
+Id int auto_increment PRIMARY KEY,
+title varchar(50) not null,
+authorName varchar(50),
+authorLastName varchar(50),
+year int(4),
+isbn varchar(10) not null
+);
