@@ -25,40 +25,30 @@ public class BookDao {
 
 
     public Book findBook() throws SQLException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Mozesz wyszukac ksiązke po: \nn - nazwisku autora\nt - tytule\ni - isbn\n " +
-                "jeżeli chcesz wyjsc wpisz end");
-        String type=scanner.nextLine();
+        BookFind bookFind=new BookFind();
+        String[] options=bookFind.bookf();
+        String type= options[0];
+        String value=options[1];
         ResultSet resultSet = null;
         switch (type) {
-            case "n":
-                System.out.print("Podaj nazwisko autora: ");
-                String authorLastname = scanner.nextLine();
+            case "authorLastname":
                 final String query = "select *from books where authorLastName=?";
                 PreparedStatement select = connection.prepareStatement(query);
-                select.setString(1, authorLastname);
+                select.setString(1, value);
                 resultSet = select.executeQuery();
                 break;
-            case "t":
-                System.out.print("Podaj tytul ksiazki: ");
-                String title = scanner.nextLine();
+            case "title":
                 final String query2 = "select *from books where title=?";
                 PreparedStatement select2 = connection.prepareStatement(query2);
-                select2.setString(1, title);
+                select2.setString(1, value);
                 resultSet = select2.executeQuery();
                 break;
-            case "i":
-                System.out.print("Podaj isbn ksiazki: ");
-                String isbn = scanner.nextLine();
+            case "isbn":
                 final String query3 = "select *from books where isbn=?";
                 PreparedStatement select3 = connection.prepareStatement(query3);
-                select3.setString(1, isbn);
+                select3.setString(1, value);
                 resultSet = select3.executeQuery();
                 break;
-            case "end":
-                System.out.println("wychodzenie z opcji wyszukiwania książki");
-            default:
-                System.out.println("jeszcze nie wyszukujemy po tej opcji");
         }
                 Book result = null;
                 if (resultSet.next()) {
@@ -68,9 +58,10 @@ public class BookDao {
                     result.setAuthorLastName(resultSet.getString("authorLastName"));
                     result.setYear(resultSet.getInt("year"));
                     result.setIsbn(resultSet.getString("isbn"));
-                }
-                return result;
+                }return result;
         }
+
+
 
     public void deletebook(String title) throws SQLException {
         final  String delete="delete from books where title=?";
